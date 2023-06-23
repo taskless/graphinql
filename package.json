@@ -51,8 +51,10 @@
   },
   "files": [
     "package.json",
+    "dist",
+    "src",
     "README.md",
-    "dist"
+    "LICENSE"
   ],
   "engines": {
     "node": ">=14.19.0"
