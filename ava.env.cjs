@@ -1,5 +1,3 @@
-/* eslint-disable */
-
 // https://github.com/nodejs/node/issues/30810
 
 const originalEmit = process.emit;

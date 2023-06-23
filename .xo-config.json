@@ -5,6 +5,10 @@
   "rules": {
     "@typescript-eslint/naming-convention": "off",
     "@typescript-eslint/no-floating-promises": "off",
+    "@typescript-eslint/parameter-properties": [
+      "error",
+      { "prefer": "class-property" }
+    ],
 
     "capitalized-comments": "off",
     "no-template-curly-in-string": "warn",
@@ -13,5 +17,5 @@
     "unicorn/no-array-method-this-argument": "off"
   },
   "plugins": [],
-  "ignores": ["*.config.*"]
+  "ignores": ["*.config.*", "*.cjs"]
 }

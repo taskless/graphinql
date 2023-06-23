@@ -1,13 +1,13 @@
+import fetch from "cross-fetch";
 import { ClientError, RequestError } from "./error.js";
 import {
-  GraphQLRequestContext,
-  GraphQLResponse,
-  Variables,
+  type GraphQLRequestContext,
+  type GraphQLResponse,
+  type Variables,
 } from "./graphql-types.js";
-import { RequestOptions } from "./request-types.js";
-import fetch from "cross-fetch";
+import { type RequestOptions } from "./request-types.js";
 
-export async function request<TData, V extends Variables>(
+export async function request<T, V extends Variables>(
   endpoint: string | URL,
   query: string,
   variables?: V,
@@ -15,12 +15,15 @@ export async function request<TData, V extends Variables>(
 ) {
   const { headers, retries } = options ?? {};
 
+  // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
+  const noVariables = {} as V; // Hard-cast
+
   const gqlRequest: GraphQLRequestContext<V> = {
     query,
-    variables: variables ?? ({} as V), // hard-cast
+    variables: variables ?? noVariables,
   };
 
-  let result: GraphQLResponse<TData> | undefined;
+  let result: GraphQLResponse<T> | undefined;
 
   const { default: pRetry } = await import("p-retry");
 
@@ -30,12 +33,12 @@ export async function request<TData, V extends Variables>(
         const r = await fetch(endpoint, {
           method: "POST",
           headers: {
-            ...(headers ?? {}),
+            ...headers,
             "content-type": "application/json",
           },
           body: JSON.stringify(gqlRequest),
         });
-        const j = (await r.json()) as GraphQLResponse<TData>;
+        const j = (await r.json()) as GraphQLResponse<T>;
         return j;
       },
 
@@ -43,21 +46,21 @@ export async function request<TData, V extends Variables>(
         retries: typeof retries === "number" ? retries : 5,
       }
     );
-  } catch (e) {
-    // the network request itself failed
-    const err = new RequestError("Unable to make the request");
-    err.original = e as Error;
-    throw err;
+  } catch (error) {
+    // The network request itself failed
+    const error_ = new RequestError("Unable to make the request");
+    error_.original = error as Error;
+    throw error_;
   }
 
-  if (typeof result === "undefined") {
+  if (result === undefined) {
     throw new RequestError("Unable to parse the response");
   }
 
-  const gqlResponse: GraphQLResponse<TData> = {
+  const gqlResponse: GraphQLResponse<T> = {
     data: result.data,
     errors: result.errors,
-    extensions: result.extensions,
+    extensions: "extensions" in result ? (result.extensions as unknown) : {},
     ...result,
   };
 
@@ -65,12 +68,12 @@ export async function request<TData, V extends Variables>(
     throw new ClientError(gqlResponse, gqlRequest);
   }
 
-  return result.data as TData;
+  return result.data as T;
 }
 
 export class GraphQLClient {
-  private endpoint: string | URL;
-  private options: RequestOptions;
+  private readonly endpoint: string | URL;
+  private readonly options: RequestOptions;
 
   constructor(endpoint: string | URL, options?: RequestOptions) {
     this.endpoint = endpoint;
@@ -80,7 +83,7 @@ export class GraphQLClient {
     };
   }
 
-  request<TData = unknown, V extends Variables = Variables>(
+  async request<T = unknown, V extends Variables = Variables>(
     query: string,
     variables?: V,
     options?: RequestOptions
@@ -91,10 +94,10 @@ export class GraphQLClient {
           ? options.retries
           : this.options.retries,
       headers: {
-        ...(this.options.headers ?? {}),
-        ...(options?.headers ?? {}),
+        ...this.options.headers,
+        ...options?.headers,
       },
     };
-    return request<TData, V>(this.endpoint, query, variables, mergedOptions);
+    return request<T, V>(this.endpoint, query, variables, mergedOptions);
   }
 }

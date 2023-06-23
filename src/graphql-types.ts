@@ -1,24 +1,22 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-// core typings taken from https://github.com/prisma-labs/graphql-request/blob/master/src/types.ts
+// Core typings taken from https://github.com/prisma-labs/graphql-request/blob/master/src/types.ts
 
-export type Variables = { [key: string]: any };
+export type Variables = Record<string, any>;
 
-export interface GraphQLError {
+export type GraphQLError = {
   message: string;
-  locations?: { line: number; column: number }[];
+  locations?: Array<{ line: number; column: number }>;
   path?: string[];
   extensions?: any;
-}
+};
 
-export interface GraphQLResponse<T = any> {
+export type GraphQLResponse<T = any> = {
   data?: T;
   errors?: GraphQLError[];
   extensions?: any;
   status: number;
-  [key: string]: any;
-}
+} & Record<string, any>;
 
-export interface GraphQLRequestContext<V = Variables> {
+export type GraphQLRequestContext<V = Variables> = {
   query: string | string[];
   variables?: V;
-}
+};

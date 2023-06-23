@@ -13,6 +13,7 @@
       "pnpm install",
       "syncpack list-mismatches",
       "syncpack format",
+      "pnpm xo",
       "pnpm clean",
       "pnpm build",
       "pnpm test"
