@@ -10,10 +10,12 @@
   },
   "hooks": {
     "before:init": [
+      "pnpm install",
       "syncpack list-mismatches",
       "syncpack format",
-      "pnpm run --filter='./packages/*' -r --if-present release:before:init",
-      "pnpm run verify"
+      "pnpm clean",
+      "pnpm build",
+      "pnpm test"
     ]
   }
 }
