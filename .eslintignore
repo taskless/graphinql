@@ -1,0 +1,5 @@
+__generated__
+.eslintrc.cjs
+node_modules
+x.*
+*.d.ts

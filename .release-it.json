@@ -1,0 +1,19 @@
+{
+  "plugins": {},
+  "npm": false,
+  "git": {
+    "commitMessage": "chore: Releases version v${version}"
+  },
+  "github": {
+    "release": true,
+    "web": true
+  },
+  "hooks": {
+    "before:init": [
+      "syncpack list-mismatches",
+      "syncpack format",
+      "pnpm run --filter='./packages/*' -r --if-present release:before:init",
+      "pnpm run verify"
+    ]
+  }
+}
