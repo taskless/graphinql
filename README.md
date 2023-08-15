@@ -1,25 +1,16 @@
 <!-- Banner -->
 <p align="center">
-  <a href="https://taskless.io">
-    <img alt="taskless logo" height="128" src="https://raw.githubusercontent.com/taskless/taskless/main/.github/resources/taskless.png">
-    <h1 align="center">Taskless</h1>
-  </a>
+    <img alt="taskless logo" height="128" src="https://github.com/taskless/graphinql/assets/1795/95429cc4-72d4-4f34-b1ca-dad6dd1d5637">
+    <h1 align="center">@taskless/graphinql</h1>
 </p>
-
-<!-- Docs -->
-<p align="center">
-  <a aria-label="taskless documentation" href="https://taskless.io/docs">Read the Documentation 📚</a>
-</p>
-
----
-
-# @taskless/graphinql
 
 A super-lightweight GraphQL client built on cross-fetch. It's used by both the Taskless Client and Taskless Dev Server for simple GraphQL operations. Originally inspired by phin, which the library was inspired by. As few dependencies as possible, works in the browser and server. Specifically built to work with strings and avoid a dependency on `graphql` / `graphql-tag` so you can keep your codebase light. In short, the best parts of [graphql-request](https://github.com/prisma-labs/graphql-request) without the `graphql` dependency.
 
 - ✅ Queries, Mutations, Introspection
 - ✅ Custom headers per request or shared via `new GraphQLClient()`
-- ❌ Typed GraphQL Document Node (exposing these types would force `graphql` to be a dependency, even for types-only)
+- ✅ Typed responses and variables
+- ❌ Typed GraphQL Document Node (exposing these types would force `graphql` to be a dependency, and trigger "multiple GraphQL" issues even for types-only support)
+  - Note: If you need the Typed Document Node, you should use the excellent [graphql-request](https://www.npmjs.com/package/graphql-request) library
 - ❌ Subscriptions
 
 # Usage
