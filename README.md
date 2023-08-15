@@ -34,9 +34,11 @@ const { data, error } = await client.request<TReturnType, TVariables>(
 request<TReturnType, TVariables>(endpoint, stringDocument, variables, options);
 ```
 
-## About the Name
+# About the Name
 
 This library was originally built on `phin` before migrating to a What-WG fetch solution.
+
+# Contributors
 
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
 
@@ -62,6 +64,6 @@ This library was originally built on `phin` before migrating to a What-WG fetch 
 
 <!-- ALL-CONTRIBUTORS-LIST:END -->
 
-## License
+# License
 
-The Taskless source code in this repository is made available under the [MIT license](LICENSE). Some of the dependencies are licensed differently, with the BSD license, for example.
+The source code in this repository is made available under the [MIT license](LICENSE).
