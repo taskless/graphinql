@@ -4,14 +4,18 @@
     <h1 align="center">@taskless/graphinql</h1>
 </p>
 
-A super-lightweight GraphQL client built on cross-fetch. It's used by both the Taskless Client and Taskless Dev Server for simple GraphQL operations. Originally inspired by phin, which the library was inspired by. As few dependencies as possible, works in the browser and server. Specifically built to work with strings and avoid a dependency on `graphql` / `graphql-tag` so you can keep your codebase light. In short, the best parts of [graphql-request](https://github.com/prisma-labs/graphql-request) without the `graphql` dependency.
+A super-lightweight GraphQL client built on cross-fetch. As few dependencies as possible, works in the browser and server. Specifically built to work with strings and avoid a dependency on `graphql` / `graphql-tag` so you can keep your codebase light. In short, the best parts of [graphql-request](https://github.com/prisma-labs/graphql-request) without the `graphql` dependency, but without losing the ability to type your requests and responses.
 
 - ✅ Queries, Mutations, Introspection
 - ✅ Custom headers per request or shared via `new GraphQLClient()`
 - ✅ Typed responses and variables
-- ❌ Typed GraphQL Document Node (exposing these types would force `graphql` to be a dependency, and trigger "multiple GraphQL" issues even for types-only support)
+- ❌ Typed GraphQL Document Node (exposing these types would force `graphql` to be a dependency, and risks the "multiple GraphQL" bug even for types-only support)
   - Note: If you need the Typed Document Node, you should use the excellent [graphql-request](https://www.npmjs.com/package/graphql-request) library
-- ❌ Subscriptions
+- ❌ Subscriptions (operates over https fetch)
+
+# UPCOMING CHANGES (4.x)
+
+:warning: With node 18 providing a What-WG compatible fetch, version 4.0 of `graphinql` will no longer provide a fetch by default nor include p-retry. You may optionally provide a polyfilled or ponyfilled fetch if you have specific fetch requirements. This is in line with the project's stated goal of minimizing external dependencies and keeping the distributed code as small as possible.
 
 # Usage
 
@@ -33,6 +37,13 @@ const { data, error } = await client.request<TReturnType, TVariables>(
 // or as a one-off
 request<TReturnType, TVariables>(endpoint, stringDocument, variables, options);
 ```
+
+* `endpoint` Your GraphQL endpoint
+* `stringDocument` A GraphQL query, as a string
+* `variables` GraphQL Variables if applicable
+* `options` A set of GraphQL Client options, provided as an object
+  * `options.headers<HeadersInit>` A Headers compatible object, specifying headers to include with the request
+  * `retries<number>` A number of retries to make for this request, defaulting to `0`, using `p-retry`
 
 # About the Name
 
