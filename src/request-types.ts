@@ -1,4 +1,4 @@
 export type RequestOptions = {
   headers?: HeadersInit;
-  retries?: number;
+  fetch?: typeof fetch;
 };

@@ -1,4 +1,3 @@
-import fetch from "cross-fetch";
 import { ClientError, RequestError } from "./error.js";
 import {
   type GraphQLRequestContext,
@@ -13,8 +12,6 @@ export async function request<T, V extends Variables>(
   variables?: V,
   options?: RequestOptions
 ) {
-  const { headers, retries } = options ?? {};
-
   // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
   const noVariables = {} as V; // Hard-cast
 
@@ -23,35 +20,18 @@ export async function request<T, V extends Variables>(
     variables: variables ?? noVariables,
   };
 
-  let result: GraphQLResponse<T> | undefined;
+  const fxtch = options?.fetch ?? fetch;
 
-  const { default: pRetry } = await import("p-retry");
+  const r = await fxtch(endpoint, {
+    method: "POST",
+    headers: {
+      ...options?.headers,
+      "content-type": "application/json",
+    },
+    body: JSON.stringify(gqlRequest),
+  });
 
-  try {
-    result = await pRetry(
-      async () => {
-        const r = await fetch(endpoint, {
-          method: "POST",
-          headers: {
-            ...headers,
-            "content-type": "application/json",
-          },
-          body: JSON.stringify(gqlRequest),
-        });
-        const j = (await r.json()) as GraphQLResponse<T>;
-        return j;
-      },
-
-      {
-        retries: typeof retries === "number" ? retries : 5,
-      }
-    );
-  } catch (error) {
-    // The network request itself failed
-    const error_ = new RequestError("Unable to make the request");
-    error_.original = error as Error;
-    throw error_;
-  }
+  const result = (await r.json()) as GraphQLResponse<T>;
 
   if (result === undefined) {
     throw new RequestError("Unable to parse the response");
@@ -78,8 +58,8 @@ export class GraphQLClient {
   constructor(endpoint: string | URL, options?: RequestOptions) {
     this.endpoint = endpoint;
     this.options = {
-      retries: typeof options?.retries === "number" ? options.retries : 5,
       headers: options?.headers ?? {},
+      fetch: options?.fetch ?? fetch,
     };
   }
 
@@ -89,10 +69,7 @@ export class GraphQLClient {
     options?: RequestOptions
   ) {
     const mergedOptions: RequestOptions = {
-      retries:
-        typeof options?.retries === "number"
-          ? options.retries
-          : this.options.retries,
+      fetch: options?.fetch ?? this.options.fetch,
       headers: {
         ...this.options.headers,
         ...options?.headers,

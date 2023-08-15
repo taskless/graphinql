@@ -1,4 +1,5 @@
 __generated__
+examples
 .eslintrc.cjs
 node_modules
 x.*
