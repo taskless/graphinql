@@ -1,6 +1,6 @@
 <!-- Banner -->
 <p align="center">
-    <img alt="taskless logo" height="128" src="https://github.com/taskless/graphinql/assets/1795/95429cc4-72d4-4f34-b1ca-dad6dd1d5637">
+    <img alt="graphinql logo" height="128" src="https://github.com/taskless/graphinql/assets/1795/95429cc4-72d4-4f34-b1ca-dad6dd1d5637">
     <h1 align="center">@taskless/graphinql</h1>
 </p>
 
@@ -13,9 +13,9 @@ A super-lightweight GraphQL client built on cross-fetch. As few dependencies as 
   - Note: If you need the Typed Document Node, you should use the excellent [graphql-request](https://www.npmjs.com/package/graphql-request) library
 - ❌ Subscriptions (operates over https fetch)
 
-# UPCOMING CHANGES (4.x)
+# BREAKING CHANGE (4.x)
 
-:warning: With node 18 providing a What-WG compatible fetch, version 4.0 of `graphinql` will no longer provide a fetch by default nor include p-retry. You may optionally provide a polyfilled or ponyfilled fetch if you have specific fetch requirements. This is in line with the project's stated goal of minimizing external dependencies and keeping the distributed code as small as possible.
+:warning: With node 18 providing a What-WG compatible fetch, version 4.0 of `graphinql` no longer provides a fetch by default nor includes p-retry. If you need these features, you can provide them yourself, via the new `fetch` option.
 
 # Usage
 
@@ -38,12 +38,17 @@ const { data, error } = await client.request<TReturnType, TVariables>(
 request<TReturnType, TVariables>(endpoint, stringDocument, variables, options);
 ```
 
-* `endpoint` Your GraphQL endpoint
-* `stringDocument` A GraphQL query, as a string
-* `variables` GraphQL Variables if applicable
-* `options` A set of GraphQL Client options, provided as an object
-  * `options.headers<HeadersInit>` A Headers compatible object, specifying headers to include with the request
-  * `retries<number>` A number of retries to make for this request, defaulting to `0`, using `p-retry`
+- `endpoint` Your GraphQL endpoint
+- `stringDocument` A GraphQL query, as a string
+- `variables` (optional) GraphQL Variables if applicable
+- `options` (optional) A set of GraphQL Client options, provided as an object
+  - `options.headers<HeadersInit>` (optional) A Headers compatible object, specifying headers to include with the request
+  - `options.fetch<typeof fetch>` (optional) A What-WG compatible fetch interface
+
+### Additional Examples
+
+- [Using a ponyfilled fetch](https://github.com/taskless/graphinql/blob/main/examples/custom-fetch.ts)
+- [Using a p-retry for retrying requests](https://github.com/taskless/graphinql/blob/main/examples/retry-fetch.ts)
 
 # About the Name
 
@@ -63,9 +68,9 @@ This library was originally built on `phin` before migrating to a What-WG fetch 
 <table>
   <tbody>
     <tr>
-      <td align="center" valign="top" width="14.28%"><a href="https://codedrift.com"><img src="https://avatars.githubusercontent.com/u/1795?v=4?s=100" width="100px;" alt="Jakob Heuser"/><br /><sub><b>Jakob Heuser</b></sub></a><br /><a href="https://github.com/taskless/taskless/commits?author=jakobo" title="Code">💻</a> <a href="#infra-jakobo" title="Infrastructure (Hosting, Build-Tools, etc)">🚇</a> <a href="https://github.com/taskless/taskless/commits?author=jakobo" title="Documentation">📖</a></td>
-      <td align="center" valign="top" width="14.28%"><a href="https://github.com/TAKANOME-DEV"><img src="https://avatars.githubusercontent.com/u/79809121?v=4?s=100" width="100px;" alt="takanome_dev"/><br /><sub><b>takanome_dev</b></sub></a><br /><a href="https://github.com/taskless/taskless/commits?author=TAKANOME-DEV" title="Documentation">📖</a> <a href="https://github.com/taskless/taskless/commits?author=TAKANOME-DEV" title="Code">💻</a></td>
-      <td align="center" valign="top" width="14.28%"><a href="https://segiddins.me"><img src="https://avatars.githubusercontent.com/u/1946610?v=4?s=100" width="100px;" alt="Samuel Giddins"/><br /><sub><b>Samuel Giddins</b></sub></a><br /><a href="https://github.com/taskless/taskless/commits?author=segiddins" title="Code">💻</a> <a href="#infra-segiddins" title="Infrastructure (Hosting, Build-Tools, etc)">🚇</a> <a href="https://github.com/taskless/taskless/commits?author=segiddins" title="Tests">⚠️</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://codedrift.com"><img src="https://avatars.githubusercontent.com/u/1795?v=4?s=100" width="100px;" height="100px;" alt="Jakob Heuser"/><br /><sub><b>Jakob Heuser</b></sub></a><br /><a href="https://github.com/taskless/taskless/commits?author=jakobo" title="Code">💻</a> <a href="#infra-jakobo" title="Infrastructure (Hosting, Build-Tools, etc)">🚇</a> <a href="https://github.com/taskless/taskless/commits?author=jakobo" title="Documentation">📖</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/TAKANOME-DEV"><img src="https://avatars.githubusercontent.com/u/79809121?v=4?s=100" width="100px;" height="100px;" alt="takanome_dev"/><br /><sub><b>takanome_dev</b></sub></a><br /><a href="https://github.com/taskless/taskless/commits?author=TAKANOME-DEV" title="Documentation">📖</a> <a href="https://github.com/taskless/taskless/commits?author=TAKANOME-DEV" title="Code">💻</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://segiddins.me"><img src="https://avatars.githubusercontent.com/u/1946610?v=4?s=100" width="100px;" height="100px;" alt="Samuel Giddins"/><br /><sub><b>Samuel Giddins</b></sub></a><br /><a href="https://github.com/taskless/taskless/commits?author=segiddins" title="Code">💻</a> <a href="#infra-segiddins" title="Infrastructure (Hosting, Build-Tools, etc)">🚇</a> <a href="https://github.com/taskless/taskless/commits?author=segiddins" title="Tests">⚠️</a></td>
     </tr>
   </tbody>
 </table>

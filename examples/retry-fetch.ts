@@ -1,4 +1,3 @@
-import fetch from "cross-fetch";
 import retry, { AbortError } from "p-retry";
 import { GraphQLClient } from "../src/client.js";
 
